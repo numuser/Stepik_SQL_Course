@@ -1,27 +1,6 @@
-----------------------------------------------------------
-CREATE TABLE book(
-    book_id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(50),
-    author VARCHAR(30),
-    price DECIMAL(8, 2),
-    amount INT
-);
-
-INSERT INTO book (title, author, price, amount)
-VALUES ('Мастер и Маргарита','Булгаков М.А.', 670.99, 3);
-
-INSERT INTO book (title, author, price, amount)
-VALUES ('Белая гвардия', 'Булгаков М.А.',540.50, 5),
-('Идиот', 'Достоевский Ф.М.', 460, 10),
-('Братья Карамазовы', 'Достоевский Ф.М.', 799.01, 2),
-('Игрок', 'Достоевский Ф.М.',480.50, 10),
-('Стихотворения и поэмы	', 'Есенин С.А.',650 ,15);
-SELECT * FROM book;
-----------------------------------------------------------
-
 -- 1.5
 
--- Создать таблицу поставка (supply), которая имеет ту же структуру, что и таблиц book.
+-- Создать таблицу поставка (supply), которая имеет ту же структуру, что и таблицa book.
 
 CREATE TABLE supply(
     supply_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -89,5 +68,3 @@ SET buy = IF(buy > amount, amount, buy),
     price = IF(buy = 0, 0.9 * price, price);
 
 SELECT * FROM book;
-
-
