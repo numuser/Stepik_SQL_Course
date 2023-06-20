@@ -126,3 +126,30 @@ WHERE buy_step.step_id = 1 AND date_step_end IS NOT NULL
 GROUP BY Год, Месяц
 ORDER BY Месяц, Год;
 
+-- Для каждой отдельной книги необходимо вывести информацию о количестве проданных экземпляров и их стоимости за 2020 и 2019 год . 
+-- Вычисляемые столбцы назвать Количество и Сумма. Информацию отсортировать по убыванию стоимости.
+SELECT title,
+        SUM(Количество) AS 'Количество', 
+        SUM(Сумма) AS 'Сумма'
+FROM
+(
+    SELECT title,
+        SUM(buy_archive.amount) AS 'Количество', 
+        SUM(buy_archive.amount * buy_archive.price) AS 'Сумма'
+    FROM book
+    JOIN buy_archive USING(book_id)
+    GROUP BY book.title
+    UNION ALL
+    SELECT book.title, 
+        SUM(buy_book.amount) AS 'Количество', 
+        SUM(buy_book.amount * book.price) AS 'Сумма'
+    FROM book 
+        INNER JOIN buy_book USING(book_id)
+        INNER JOIN buy USING(buy_id) 
+        INNER JOIN buy_step USING(buy_id)
+        INNER JOIN step USING(step_id)
+    WHERE buy_step.step_id = 1 AND date_step_end IS NOT NULL
+    GROUP BY book.title
+) AS subqvery
+GROUP BY subqvery.title
+ORDER BY Сумма DESC;
