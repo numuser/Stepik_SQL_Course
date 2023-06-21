@@ -44,3 +44,44 @@ WHERE book_id IN
         WHERE buy_id = 5
         ); 
 
+-- Создать счет (таблицу buy_pay) на оплату заказа с номером 5, в который включить название книг, их автора, цену, количество заказанных книг и стоимость.
+-- Последний столбец назвать Стоимость. Информацию в таблицу занести в отсортированном по названиям книг виде.
+CREATE TABLE buy_pay AS
+SELECT
+    title, name_author, price, amount, (price * amount) AS 'Стоимость'
+FROM author
+    JOIN book USING(author_id)
+    JOIN buy_book USING(book_id)
+WHERE buy_id = 5
+ORDER BY title;
+
+-- В таблицу buy_step для заказа с номером 5 включить все этапы из таблицы step, которые должен пройти этот заказ. В столбцы date_step_beg и date_step_end всех записей занести Null.
+INSERT INTO buy_step (buy_id, step_id, date_step_beg, date_step_end)
+SELECT buy.buy_id, step.step_id, NULL, NULL
+FROM buy CROSS JOIN step
+WHERE buy.buy_id = 5; 
+
+-- В таблицу buy_step занести дату 12.04.2020 выставления счета на оплату заказа с номером 5.
+-- Правильнее было бы занести не конкретную, а текущую дату. Это можно сделать с помощью функции Now(). 
+-- Но при этом в разные дни будут вставляться разная дата, и задание нельзя будет проверить, поэтому  вставим дату 12.04.2020.
+UPDATE buy_step JOIN step USING(step_id)
+SET date_step_beg = '2020.04.12'
+WHERE buy_id = 5 AND step.step_id = 1;
+
+-- Завершить этап «Оплата» для заказа с номером 5, вставив в столбец date_step_end дату 13.04.2020, и начать следующий этап («Упаковка»), задав в столбце date_step_beg для этого этапа ту же дату.
+-- Реализовать два запроса для завершения этапа и начале следующего. Они должны быть записаны в общем виде, чтобы его можно было применять для любых этапов, изменив только текущий этап. Для примера пусть это будет этап «Оплата».
+UPDATE buy_step JOIN step USING(step_id)
+SET date_step_end = '2020.04.13'
+WHERE buy_id = 5 AND step.step_id = 1;
+
+UPDATE buy_step JOIN step USING(step_id)
+SET date_step_beg = '2020.04.13'
+WHERE buy_id = 5 AND step.step_id = 2;
+--------------------------------------
+SELECT '.∧＿∧
+( ･ω･｡)つ━☆・*。
+⊂　 ノ 　　　・゜+.
+しーＪ　　　°。+ *´¨)
+　　　　　　　　　.· ´¸.·*´¨)
+　　　　　　　　　　(¸.·´ ( ¸.·"* ☆ ВЖУХ ☆" '
+FROM book
