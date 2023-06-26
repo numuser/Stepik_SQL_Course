@@ -5,8 +5,9 @@ DROP TABLE IF EXISTS answer;
 DROP TABLE IF EXISTS question;
 DROP TABLE IF EXISTS subject;
 
-CREATE TABLE subject (
-    subject_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE subject
+(
+    subject_id   INT PRIMARY KEY AUTO_INCREMENT,
     name_subject VARCHAR(30)
 );
 
@@ -15,8 +16,9 @@ VALUES ('Основы SQL'),
        ('Основы баз данных'),
        ('Физика');
 
-CREATE TABLE student (
-    student_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE student
+(
+    student_id   INT PRIMARY KEY AUTO_INCREMENT,
     name_student VARCHAR(50)
 );
 
@@ -26,12 +28,13 @@ VALUES ('Баранов Павел'),
        ('Семенов Иван'),
        ('Яковлева Галина');
 
-CREATE TABLE attempt (
-    attempt_id INT PRIMARY KEY AUTO_INCREMENT,
-    student_id INT,
-    subject_id INT,
+CREATE TABLE attempt
+(
+    attempt_id   INT PRIMARY KEY AUTO_INCREMENT,
+    student_id   INT,
+    subject_id   INT,
     date_attempt DATE,
-    result INT,
+    result       INT,
     FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE,
     FOREIGN KEY (subject_id) REFERENCES subject (subject_id) ON DELETE CASCADE
 );
@@ -45,10 +48,11 @@ VALUES (1, 2, '2020-03-23', 67),
        (4, 2, '2020-04-21', 100),
        (3, 1, '2020-05-17', 33);
 
-CREATE TABLE question (
-    question_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE question
+(
+    question_id   INT PRIMARY KEY AUTO_INCREMENT,
     name_question VARCHAR(100),
-    subject_id INT,
+    subject_id    INT,
     FOREIGN KEY (subject_id) REFERENCES subject (subject_id) ON DELETE CASCADE
 );
 
@@ -63,12 +67,13 @@ VALUES ('Запрос на выборку начинается с ключево
        ('Концептуальная модель используется для', 2),
        ('Какой тип данных не допустим в реляционной таблице?', 2);
 
-CREATE TABLE answer (
-    answer_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE answer
+(
+    answer_id   INT PRIMARY KEY AUTO_INCREMENT,
     name_answer VARCHAR(100),
     question_id INT,
-    is_correct BOOLEAN,
-    FOREIGN KEY question_id REFERENCES question (question_id) ON DELETE CASCADE
+    is_correct  BOOLEAN,
+    FOREIGN KEY (question_id) REFERENCES question (question_id) ON DELETE CASCADE
 );
 
 INSERT INTO answer (name_answer, question_id, is_correct)
@@ -101,11 +106,12 @@ VALUES ('UPDATE', 1, FALSE),
        ('VARCHAR', 9, FALSE),
        ('DATE', 9, FALSE);
 
-CREATE TABLE testing (
-    testing_id INT PRIMARY KEY AUTO_INCREMENT,
-    attempt_id INT,
+CREATE TABLE testing
+(
+    testing_id  INT PRIMARY KEY AUTO_INCREMENT,
+    attempt_id  INT,
     question_id INT,
-    answer_id INT,
+    answer_id   INT,
     FOREIGN KEY (attempt_id) REFERENCES attempt (attempt_id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES question (question_id) ON DELETE CASCADE,
     FOREIGN KEY (answer_id) REFERENCES answer (answer_id) ON DELETE CASCADE
