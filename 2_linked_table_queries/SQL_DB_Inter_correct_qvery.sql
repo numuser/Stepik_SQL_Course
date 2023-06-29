@@ -35,7 +35,8 @@ WHERE name_author LIKE 'Булгаков%' AND title LIKE 'Белая гвард
 SELECT * FROM buy_book;
 
 -- Уменьшить количество тех книг на складе, которые были включены в заказ с номером 5.
-UPDATE book JOIN buy_book USING(book_id)
+UPDATE book 
+    JOIN buy_book USING(book_id)
 SET book.amount = book.amount - buy_book.amount
 WHERE book_id IN 
         (
