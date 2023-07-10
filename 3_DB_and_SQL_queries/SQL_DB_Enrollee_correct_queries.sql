@@ -64,6 +64,22 @@ DROP TABLE applicant;
 -- ALTER TABLE таблица CHANGE имя_столбца новое_имя_столбца ТИП ДАННЫХ;
 
 -- Включить в таблицу applicant_order новый столбец str_id целого типа , расположить его перед первым.
+ALTER TABLE applicant_order ADD str_id INT FIRST;
 
+-- Занести в столбец str_id таблицы applicant_order нумерацию абитуриентов, которая начинается с 1 для каждой образовательной программы.
+SET @row_num := 0;
+SET @row_num := 1;
 
+UPDATE applicant_order 
+SET str_id = if(program_id = @num_pr, @row_num := @row_num + 1, @row_num := 1 AND
+                @num_pr := program_id);
 
+-- Создать таблицу student,  в которую включить абитуриентов, которые могут быть рекомендованы к зачислению  в соответствии с планом набора. 
+-- Информацию отсортировать сначала в алфавитном порядке по названию программ, а потом по убыванию итогового балла.
+CREATE TABLE student
+SELECT name_program, name_enrollee, itog
+FROM program 
+    JOIN applicant_order USING(program_id)
+    JOIN enrollee USING(enrollee_id)
+WHERE str_id <= plan
+ORDER BY name_program, itog DESC;
